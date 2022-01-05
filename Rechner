@@ -1,0 +1,117 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Grundrechner10erReihe
+{
+    public partial class Frm_haupt : Form
+    {
+        public Frm_haupt()
+        {
+            InitializeComponent();
+        }
+
+        private int[] a = new int[11];
+        private int[] b = new int[11];
+        private int z1 = -1, z2 = -1; //Initialisierung mit -1 für Abfangen fehlender Auswahl von z1 und z2
+        private string op;
+        private int rest, erg;
+
+        private void init()
+        {            
+            rBtn_add.Checked = false;
+            rBtn_sub.Checked = false;
+            rBtn_multi.Checked = false;
+            rBtn_div.Checked = false;
+            lbl_ergebnis.Text = "Ergebnis: ";
+        }
+        private void btn_init_Click(object sender, EventArgs e)
+        {
+            z1 = -1; z2 = -1;
+            init();
+            for (int i = 0; i < 11; i++)
+                a[i] = i;
+            b = (int[])a.Clone();
+
+            lBx_z1.Items.Clear();
+            lBx_z2.Items.Clear();
+
+            for(int i=0; i<a.Length; i++)
+            {
+                lBx_z1.Items.Add(a[i]);
+                lBx_z2.Items.Add(b[i]);
+            }
+
+        }
+
+        private void lBx_z1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            init();
+            z1 = (int)(lBx_z1.SelectedItem);
+        }
+
+        private void lBx_z2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            init();
+            z2 = (int)(lBx_z2.SelectedItem);
+        }
+
+        private void rBtn_op_Click(object sender, EventArgs e)
+        {
+            if (z1==-1||z2==-1)
+            {
+                init();
+                MessageBox.Show("Bitte wählen Sie die zwei Operanden aus des Listen!");
+            }
+            else
+            {
+                if (rBtn_add.Checked)
+                {
+                   op = "+";
+                   //Verarbeitung
+                   erg = z1 + z2;
+                   //Ausgabe
+                   lbl_ergebnis.Text = "Ergebnis: " + erg.ToString();
+                }
+                if (rBtn_sub.Checked)
+                {
+                    op = "-";
+                    //Verarbeitung
+                    erg = z1 - z2;
+                    //Ausgabe
+                    lbl_ergebnis.Text = "Ergebnis: " + erg.ToString();
+                }
+                if (rBtn_multi.Checked)
+                {
+                    op = "*";
+                    //Verarbeitung
+                    erg = z1 * z2;
+                    //Ausgabe
+                    lbl_ergebnis.Text = "Ergebnis: " + erg.ToString();
+                }
+                if (rBtn_div.Checked)
+                {
+                    try
+                    {
+                        op = "/";
+                        //Verarbeitung
+                        erg = z1 / z2;
+                        rest = z1 % z2;
+                        //Ausgabe
+                        lbl_ergebnis.Text = "Ergebnis: " + erg.ToString() + " Rest: " + rest.ToString();
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }   
+                }
+            }
+        }
+    }
+}
